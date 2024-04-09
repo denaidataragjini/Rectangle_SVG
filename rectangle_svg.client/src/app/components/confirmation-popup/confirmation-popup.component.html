@@ -1,0 +1,15 @@
+<div class="confirmation-dialog">
+  <div class="confirmation-dialog-content">
+    <div class="confirmation-dialog-header">
+      <h2>Confirmation</h2>
+      <button class="close-button" (click)="cancelAction()">X</button>
+    </div>
+    <div class="confirmation-dialog-body">
+      <p>{{ description }}</p>
+    </div>
+    <div class="confirmation-dialog-footer">
+      <button (click)="confirmAction()">Yes</button>
+      <button (click)="cancelAction()">No</button>
+    </div>
+  </div>
+</div>

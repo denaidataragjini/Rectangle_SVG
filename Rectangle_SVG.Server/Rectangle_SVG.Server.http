@@ -1,0 +1,6 @@
+@Rectangle_SVG.Server_HostAddress = http://localhost:5128
+
+GET {{Rectangle_SVG.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

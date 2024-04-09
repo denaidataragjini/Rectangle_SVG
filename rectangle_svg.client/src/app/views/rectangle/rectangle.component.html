@@ -1,0 +1,41 @@
+<button (click)="onButtonClick()" class="btn">Reset SVG Data</button>
+<div class="host-container" *ngIf="rectangle">
+  <svg
+    width="85%"
+    height="80%"
+    (mousedown)="handleDrag($event)"
+    (mousemove)="handleDragResize($event)"
+    (mouseup)="handleMouseUp()"
+  >
+    <rect
+      [attr.x]="rectangle.x"
+      [attr.y]="rectangle.y"
+      [attr.width]="rectangle.width"
+      [attr.height]="rectangle.height"
+      fill="lightblue"
+      fill="#6088e7"
+      stroke="blue"
+      stroke-width="2"
+      (mousedown)="handleResize($event)"
+      (mousemove)="handleResizeMove($event)"
+      (mouseup)="handleMouseUp()"
+    ></rect>
+    <text [attr.x]="10" [attr.y]="20">X: {{ rectangle.x }} px</text>
+    <text [attr.x]="10" [attr.y]="40">Y: {{ rectangle.y }} px</text>
+    <text [attr.x]="1000" [attr.y]="20">
+      Perimeter: {{ calculatePerimeter() }} cm
+    </text>
+    <text [attr.x]="1000" [attr.y]="40">
+      Width: {{ roundValueInCm(rectangle.width) }} cm
+    </text>
+    <text [attr.x]="1000" [attr.y]="60">
+      Height: {{ roundValueInCm(rectangle.height) }} cm
+    </text>
+  </svg>
+</div>
+
+<app-confirmation-popup
+  *ngIf="showConfirmationPopUp"
+  [description]="'Do you want to procced with this changes on rectangle?'"
+  (confirmed)="onConfirmationEvent($event)"
+></app-confirmation-popup>

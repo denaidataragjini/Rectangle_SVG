@@ -1,0 +1,20 @@
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: bold;
+  z-index: 1000;
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+}
+
+.toast.success {
+  background-color: #5cb85c; /* Green background for success */
+}
+
+.toast.error {
+  background-color: #d9534f; /* Red background for error */
+}
