@@ -25,37 +25,40 @@ export class RectangleComponent implements OnInit {
 
   showConfirmationPopUp = false;
 
-  // Assuming 1 cm is equivalent to approximately 37.8 pixels
+  // Assuming 1 cm is equivalent to 37.8 pixels
   pixelsPerCm = 37.8;
 
   ngOnInit(): void {
     this.onGetInitialRectangleData();
   }
 
+  // Gets the initial data of rectangle svg from server
   onGetInitialRectangleData() {
     this.rectangleService.getInitialRectangleData().subscribe({
       next: (result: RectangleData) => {
         this.rectangle = result;
       },
       error: (err: any) => {
-        console.log(err);
+        this.toastService.showToast(err.messsage, 'error');
       },
     });
   }
 
+  // Updates-resets the data of rectangle svg
   onResetRectangleData() {
     this.rectangleService.updateRectangleData(this.rectangle).subscribe({
       next: () => {
         this.toastService.showToast('Updated successfully!', 'success');
       },
       error: (err: any) => {
-        this.toastService.showToast(err, 'error');
+        this.toastService.showToast(err.messsage, 'error');
       },
     });
   }
+
   /**
-   * Handles the dragging functionality on the SVG container during mousedown event.
-   * Sets up initial values for dragging based on the mouse position and the current rectangle position.
+   * Sets up initial values for dragging based on the mouse position and the current
+   * rectangle position during mousedown event.
    * @param event The MouseEvent representing the mouse down event.
    */
   handleDrag(event: MouseEvent): void {
@@ -67,7 +70,6 @@ export class RectangleComponent implements OnInit {
   }
 
   /**
-   * Handles the resizing of the rectangle while dragging the mouse.
    * Updates the position of the rectangle based on the mouse movement.
    * @param event The MouseEvent representing the mouse move event.
    */
@@ -78,35 +80,45 @@ export class RectangleComponent implements OnInit {
     }
   }
 
+  /**
+   * Handles the resizing behavior, and stores the initial dimensions and position of the rectangle
+   * @param event The MouseEvent representing the mouse down event.
+   */
   handleResize(event: MouseEvent): void {
     this.isResizing = true;
+
     this.startWidth = this.rectangle.width;
     this.startHeight = this.rectangle.height;
+
     this.startX = event.clientX;
     this.startY = event.clientY;
 
-    // // Prevent default behavior to avoid text selection during resize
+    //Prevent default behavior to avoid text selection during resize
     event.preventDefault();
   }
 
+  /**
+   * This method updates the dimensions of the rectangle based on the mouse movement
+   * when resizing is in progress.
+   * @param {MouseEvent} event - The MouseEvent representing the mouse move event.
+   */
   handleResizeMove(event: MouseEvent): void {
     if (this.isResizing) {
-      // Calculate the new width and height based on mouse movement
       const deltaX = event.clientX - this.startX;
       const deltaY = event.clientY - this.startY;
 
-      // Update rectangle dimensions
       this.rectangle.width = Math.max(0, this.startWidth + deltaX);
       this.rectangle.height = Math.max(0, this.startHeight + deltaY);
     }
   }
 
+  // Stop resizing or dragging when releasing the mouse button
   handleMouseUp(): void {
-    // Stop resizing or dragging when releasing the mouse button
     this.isResizing = false;
     this.isDragging = false;
   }
 
+  //Function to calculate perimeter of rectangle
   calculatePerimeter(): number {
     return Math.round(
       2 *
@@ -115,10 +127,15 @@ export class RectangleComponent implements OnInit {
     );
   }
 
+  //Button click on reseizing data
   onButtonClick() {
     this.showConfirmationPopUp = true;
   }
 
+  /**
+   * Handles the confirmation event triggered by pop up.
+   * If the event is true, resets rectangle data; otherwise, hides the confirmation popup.
+   */
   onConfirmationEvent(event: boolean) {
     if (event) {
       this.onResetRectangleData();
@@ -126,6 +143,11 @@ export class RectangleComponent implements OnInit {
     this.showConfirmationPopUp = false;
   }
 
+  /**
+   * Rounds a given value from pixels to centimeters based on the configured pixels per centimeter ratio.
+   * @param {number} value - The value in pixels to be converted to centimeters.
+   * @returns {number} The rounded value in centimeters.
+   */
   roundValueInCm(value: number): number {
     return Math.round(value / this.pixelsPerCm);
   }
